@@ -1,5 +1,5 @@
 import { Handler, serve } from "https://deno.land/std@0.122.0/http/server.ts";
-import { router, Routes } from "../mod.ts";
+import { router, Routes } from "https://deno.land/x/url_router@0.0.0/mod.ts";
 
 const PORT = 8000;
 
