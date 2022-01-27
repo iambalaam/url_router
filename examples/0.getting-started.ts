@@ -1,15 +1,18 @@
-import { Handler, serve } from "https://deno.land/std@0.122.0/http/server.ts";
-import { router, Routes } from "https://deno.land/x/url_router@0.0.0/mod.ts";
+import { serve } from "https://deno.land/std@0.122.0/http/server.ts";
+import { router, Routes, Middleware } from "../mod.ts";
+import { logger } from '../middlewares/logger.ts'
 
-const PORT = 8000;
-
-const handler: Handler = (_req) => new Response("hello noobs");
-const notFound: Handler = (_req) => new Response("404");
-
+const handler: Middleware = (_req) => new Response("hello noobs");
+const notFound: Middleware = (_req) => new Response("404");
+const slow: Middleware = async (_req) => {
+  await new Promise((res) => setTimeout(res, 1000));
+  return new Response("hello noobs");
+}
 const routes: Routes = [
-  [new URLPattern({ pathname: "/" }), handler],
-  [new URLPattern({ pathname: "*" }), notFound],
+  [new URLPattern({ pathname: "/" }), [logger, handler]],
+  [new URLPattern({ pathname: "/slow" }), [logger, slow]],
+  [new URLPattern({ pathname: "*" }), [logger, notFound]],
 ];
 
-console.log(`🦕 Deno server running at http://localhost:${PORT}/ 🦕`);
-await serve(router(routes), { port: PORT });
+console.log(`🦕 Deno server running at http://localhost:8000}/ 🦕`);
+await serve(router(routes));

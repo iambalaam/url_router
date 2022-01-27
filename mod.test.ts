@@ -1,9 +1,8 @@
 import {
   ConnInfo,
-  Handler,
 } from "https://deno.land/std@0.122.0/http/server.ts";
 import { assertEquals } from "https://deno.land/std@0.122.0/testing/asserts.ts";
-import { router, Routes } from "./mod.ts";
+import { router, Routes, Middleware } from "./mod.ts";
 
 const BASE_URL = "https://deno.land";
 function createMockRequest(url: string): Request {
@@ -26,7 +25,7 @@ Deno.test("* catches all routes", () => {
   const fn = createMockFunction();
 
   const all: Routes = [
-    [new URLPattern({ pathname: "/" }), fn as any as Handler],
+    [new URLPattern({ pathname: "/" }), [fn as any as Middleware]],
   ];
 
   router(all)(req, MOCK_CONN_INFO);
