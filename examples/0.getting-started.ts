@@ -6,7 +6,7 @@ const handler: Middleware = (_req) => new Response("hello noobs");
 const notFound: Middleware = (_req) => new Response("404");
 const slow: Middleware = async (_req) => {
   await new Promise((res) => setTimeout(res, 1000));
-  return new Response("hello noobs");
+  return new Response("hello slow noobs");
 }
 const routes: Routes = [
   [new URLPattern({ pathname: "/" }), [logger, handler]],
@@ -14,5 +14,5 @@ const routes: Routes = [
   [new URLPattern({ pathname: "*" }), [logger, notFound]],
 ];
 
-console.log(`🦕 Deno server running at http://localhost:8000}/ 🦕`);
+console.log(`🦕 Deno server running at http://localhost:8000/ 🦕`);
 await serve(router(routes));
